@@ -35,6 +35,52 @@ function newBook(book) {
     return div;
 }
 
+    function displayBookDetails(book) {
+        // Implemente a lógica para exibir os detalhes do livro na página
+        // Por exemplo, você pode atualizar o conteúdo de uma div com os detalhes do livro
+        var bookDetailsDiv = document.getElementById('bookDetails');
+        bookDetailsDiv.style.display = 'block'; // Exibir a seção de detalhes do livro
+        bookDetailsDiv.innerHTML = `
+                    <div class="column is-centered">
+                        <div class="card">
+                            <div class="card-content">
+                                <div class="content">
+                                    <p class="title">${book.name}</p>
+                                    <p>ID: ${book.id}</p>
+                                    <p>Quantidade: ${book.quantity}</p>
+                                    <p>Preço: ${book.price}</p>
+                                    <p>Autor: ${book.author}</p>
+                                </div>
+                            </div>
+                            <div class="card-image" style="display: flex; justify-content: center;">
+                                <img
+                                    src="${book.photo}"
+                                    alt="${book.name}"
+                                    class="modal-button"
+                                    style="max-width: 300px; max-height: 300px;"
+                                />
+                            </div>
+                        </div>
+                    </div>
+        `;
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchButton = document.getElementById('searchButton');
+        searchButton.addEventListener('click', function () {
+            const bookId = document.getElementById('bookIdInput').value;
+            fetch('http://localhost:3000/product/' + bookId)
+                .then(response => response.json())
+                .then(book => {
+                    displayBookDetails(book);
+                })
+                .catch(error => {
+                    console.error('Erro ao pesquisar por ID:', error);
+                    swal('Erro', 'Erro ao pesquisar por ID do livro', 'error');
+                });
+        });
+    });
+
 function calculateShipping(id, cep) {
     fetch('http://localhost:3000/shipping/' + cep)
         .then((data) => {
